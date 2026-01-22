@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gaurav Mangeshkar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== GLOBAL ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+}
+
+body {
+  background: black;
+  color: #00ff00;
+  overflow: hidden;
+}
+
+/* ===== MATRIX BACKGROUND ===== */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile {
+  width: 90%;
+  max-width: 420px;
+  margin: 100px auto;
+  border: 1px solid #00ff00;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 20px #00ff00;
+}
+
+/* ===== GLITCH TEXT ===== */
+.glitch {
+  font-size: 26px;
+  text-align: center;
+  position: relative;
+  animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+  0% { text-shadow: 2px 0 red; }
+  25% { text-shadow: -2px 0 blue; }
+  50% { text-shadow: 2px 2px lime; }
+  75% { text-shadow: -2px -2px red; }
+  100% { text-shadow: 2px 0 blue; }
+}
+
+/* ===== TERMINAL ===== */
+.terminal {
+  margin-top: 20px;
+  border: 1px solid #00ff00;
+  padding: 10px;
+  height: 180px;
+  overflow-y: auto;
+  background: black;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ===== SKILLS ===== */
+.skills {
+  margin-top: 15px;
+}
+
+.skill {
+  margin: 6px 0;
+}
+
+.bar {
+  height: 6px;
+  background: #003300;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: #00ff00;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="profile">
+  <div class="glitch">[ Gaurav Mangeshkar ]</div>
+
+  <div class="terminal" id="terminal">
+    <div>$ initializing system...</div>
+  </div>
+
+  <div class="skills">
+    <div class="skill">HTML
+      <div class="bar"><span style="width:90%"></span></div>
+    </div>
+    <div class="skill">CSS
+      <div class="bar"><span style="width:85%"></span></div>
+    </div>
+    <div class="skill">JavaScript
+      <div class="bar"><span style="width:80%"></span></div>
+    </div>
+    <div class="skill">Cyber Security
+      <div class="bar"><span style="width:70%"></span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ACCESS LEVEL: ROOT
+  </div>
+</div>
+
+<script>
+/* ===== MATRIX EFFECT ===== */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for (let x = 0; x < columns; x++) {
+  drops[x] = 1;
+}
+
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#00ff00";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 33);
+
+/* ===== TERMINAL TYPING EFFECT ===== */
+const terminal = document.getElementById("terminal");
+const lines = [
+  "$ loading profile...",
+  "$ username: anonymous",
+  "$ role: hacker / developer",
+  "$ status: online",
+  "$ access granted ✔"
+];
+
+let lineIndex = 0;
+
+function typeLine() {
+  if (lineIndex < lines.length) {
+    const div = document.createElement("div");
+    div.textContent = lines[lineIndex];
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
+    lineIndex++;
+    setTimeout(typeLine, 800);
+  } else {
+    const cursor = document.createElement("span");
+    cursor.className = "cursor";
+    cursor.textContent = "_";
+    terminal.appendChild(cursor);
+  }
+}
+
+setTimeout(typeLine, 1000);
+</script>
+
+</body>
+</html>
